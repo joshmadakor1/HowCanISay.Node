@@ -1,17 +1,28 @@
 const express = require("express");
 const router = express.Router();
+const Keys = require("../Internal/keys");
+const Locations = require("../Internal/locations");
+const queryEs = require("../modules/queryEs");
 router.use(express.json());
 
-router.get("/", (req, res) => {
-  res.status(200).send({ message: "Welcome to Definition" });
+router.get("/term/:searchTerm", (req, res) => {
+  console.log(req.params.searchTerm);
+  if (req.params)
+    queryEs(req.params.searchTerm, results => {
+      if (results) res.status(200).send(results);
+      else res.status(200).send({ message: "Elasticsearch is down :D" });
+    });
 });
 
 // Create by Term
+// Post validate user input and post new definition to MongoDB
 router.post("/term/:term", (req, res) => {
+  console.log(Locations);
   res.status(200).send({ message: `Created definition: ${req.params.term}` });
 });
 
 // Read by Term
+// Query MongoDB for req.params.term, return array of matching objects
 router.get("/term/:term", (req, res) => {
   const definitions = [
     {
@@ -43,13 +54,12 @@ router.get("/term/:term", (req, res) => {
       tags: ["Daily", "Travel", "General"]
     }
   ];
-  console.log();
   res.status(200).send(definitions);
 });
 
 // Read by ID
+// Query MongoDB for req.params.id, return array of matching objects
 router.get("/id/:id", (req, res) => {
-  //Get a single definition based on ID
   const definition = [
     {
       id: req.params.id,
@@ -70,12 +80,15 @@ router.get("/id/:id", (req, res) => {
 });
 
 // Update by ID
+// Update record in MongoDB for req.params.id
 router.put("/id/:id", (req, res) => {
   res.status(200).send(`Updated definition: ${req.params.id}`);
 });
 
 // Delete by ID
+// Validate user input and delete record in MongoDB for req.params.id
 router.delete("/id/:id", (req, res) => {
   res.status(200).send(`Deleted definition: ${req.params.id}`);
 });
+
 module.exports = router;
