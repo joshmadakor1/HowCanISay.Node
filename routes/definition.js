@@ -6,11 +6,14 @@ const queryEs = require("../modules/queryEs");
 router.use(express.json());
 
 router.get("/term/:searchTerm", (req, res) => {
-  console.log(req.params.searchTerm);
   if (req.params)
     queryEs(req.params.searchTerm, results => {
       if (results) res.status(200).send(results);
-      else res.status(200).send({ message: "Elasticsearch is down :D" });
+      else
+        res
+          .status(200)
+          .setHeader("Content-Type", "application/json")
+          .end({ message: "Elasticsearch is down :D" });
     });
 });
 
