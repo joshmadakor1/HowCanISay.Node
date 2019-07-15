@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const Keys = require("../Internal/keys");
-const Locations = require("../Internal/locations");
 const queryEs = require("../modules/queryEs");
+const interractWithMongoDb = require("../modules/queryMdbDefinitions");
+
 router.use(express.json());
 
 router.get("/term/:searchTerm", (req, res) => {
@@ -13,51 +13,35 @@ router.get("/term/:searchTerm", (req, res) => {
         res
           .status(200)
           .setHeader("Content-Type", "application/json")
-          .end({ message: "Elasticsearch is down :D" });
+          .send({ message: "Elasticsearch is down :D" });
     });
 });
 
 // Create by Term
 // Post validate user input and post new definition to MongoDB
-router.post("/term/:term", (req, res) => {
-  console.log(Locations);
-  res.status(200).send({ message: `Created definition: ${req.params.term}` });
+router.post("/mongoterm", (req, res) => {
+  interractWithMongoDb
+    .postDefinition(req.body)
+    .then(() => {
+      res.status(200).send({ message: "success" });
+    })
+    .catch(err => {
+      res.status(500).send({ message: err });
+    });
 });
 
 // Read by Term
 // Query MongoDB for req.params.term, return array of matching objects
-router.get("/term/:term", (req, res) => {
-  const definitions = [
-    {
-      id: 1,
-      dateCreated: "6/25/2019",
-      author: "Joshsmad",
-      sourceLanguage: "English",
-      destinationLanguage: "Japanese",
-      sourceTerm: req.params.term,
-      destinationTermNative: "ちんこ",
-      destinationTermRoman: "chinko",
-      thumbsUp: 55,
-      thumbsDown: 22,
-      audio: "🔊",
-      tags: ["Lol", "Funny", "Memes"]
-    },
-    {
-      id: 2,
-      dateCreated: "5/15/2018",
-      author: "Joshsmad",
-      sourceLanguage: "English",
-      destinationLanguage: "Japanese",
-      sourceTerm: req.params,
-      destinationTermNative: "けつ",
-      destinationTermRoman: "ketsu",
-      thumbsUp: 100,
-      thumbsDown: 4,
-      audio: "🔊",
-      tags: ["Daily", "Travel", "General"]
-    }
-  ];
-  res.status(200).send(definitions);
+router.get("/mongoterm/:term", (req, res) => {
+  interractWithMongoDb
+    .getDefinition(req.params.term)
+    .then(data => {
+      res.status(200).send(data);
+    })
+    .catch(err => {
+      res.status(500).send({ message: "There was an error." });
+    });
+  //getDefinition(req.body.params)
 });
 
 // Read by ID

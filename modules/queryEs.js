@@ -1,7 +1,7 @@
+require("dotenv").config();
 const request = require("request");
-const Locations = require("../Internal/locations");
-const esIP = Locations.ElasticSearch.serverIp;
-const esPort = Locations.ElasticSearch.serverPort;
+const esIP = process.env.ELASTICSEARCH_IP;
+const esPort = process.env.ELASTICSEARCH_PORT;
 
 async function queryEs(searchTerm, callback) {
   await request(
