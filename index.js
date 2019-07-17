@@ -6,6 +6,7 @@ const home = require("./routes/home");
 const definitions = require("./routes/definitions");
 const requests = require("./routes/requests");
 const profile = require("./routes/profile");
+const upload = require("./routes/upload");
 const https = require("https");
 const fs = require("fs");
 const result = require("dotenv").config();
@@ -27,6 +28,7 @@ app.use("/", home);
 app.use("/api/definitions", definitions);
 app.use("/api/requests", requests);
 app.use("/api/profile", profile);
+app.use("/api/upload", upload);
 
 const port = process.env.PORT || 8080;
 

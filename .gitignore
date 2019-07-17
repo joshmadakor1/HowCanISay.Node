@@ -6,12 +6,14 @@ lib-cov
 *.out
 *.pid
 *.gz
-
+*.mp3
+mp3
 pids
 logs
 results
 build
 keys
+keys.js
 internal
 
 node_modules

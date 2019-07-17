@@ -9,6 +9,7 @@
   "author": "Josh Madakor",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.493.0",
     "body-parser": "^1.19.0",
     "dotenv": "^8.0.0",
     "es6": "npm:@elastic/elasticsearch@^6.8.0",
@@ -16,6 +17,8 @@
     "joi": "^14.3.1",
     "mongoosastic": "^4.5.0",
     "mongoose": "^5.6.3",
+    "multer": "^1.4.2",
+    "multer-s3": "^2.9.0",
     "request": "^2.88.0"
   }
 }
