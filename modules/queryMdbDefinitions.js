@@ -1,14 +1,16 @@
 const mongoose = require("mongoose");
 const mongoosastic = require("mongoosastic");
 const definitionSchema = new mongoose.Schema({
-  author: String,
+  author: { type: String, default: "Josh" },
   sourceLanguage: String,
   destinationLanguage: String,
   sourceTerm: String,
   destinationTermNative: String,
   destinationTermRoman: String,
-  thumbsUp: Number,
-  thumbsDown: Number,
+  sourceSentence: String,
+  destinationSentence: String,
+  thumbsUp: { type: Number, default: 0 },
+  thumbsDown: { type: Number, default: 0 },
   audioUrl: String,
   tags: [String],
   date: { type: Date, default: Date.now }
@@ -37,14 +39,13 @@ mongoose
 
 /** Records the definition to MongoDB*/
 async function postDefinition(def) {
-  console.log(def);
   const definition = new Definition(def);
 
   const result = await definition
     .save()
     .then(() => {
       console.log("Success");
-      mongoose.disconnect();
+      //mongoose.disconnect();
     })
     .catch(err => {
       console.log("Error", err);

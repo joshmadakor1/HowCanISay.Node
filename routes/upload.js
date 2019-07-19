@@ -49,8 +49,13 @@ router.post("/", type, (req, res) => {
               ACL: "public-read"
             };
             s3.upload(params, function(s3Err, data) {
-              if (s3Err) throw s3Err;
+              if (s3Err) {
+                res.status(500).send({ message: s3Err });
+                throw s3Err;
+              }
               console.log(`File uploaded successfully at ${data.Location}`);
+
+              res.status(200).send({ message: "success" });
             });
           }
         );

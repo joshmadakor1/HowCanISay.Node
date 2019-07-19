@@ -20,6 +20,7 @@ router.get("/term/:searchTerm", (req, res) => {
 // Create by Term
 // Post validate user input and post new definition to MongoDB
 router.post("/mongoterm", (req, res) => {
+  console.log(req.body);
   interractWithMongoDb
     .postDefinition(req.body)
     .then(() => {
