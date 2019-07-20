@@ -11,7 +11,7 @@ router.get("/term/:searchTerm", (req, res) => {
       if (results) res.status(200).send(results);
       else
         res
-          .status(200)
+          .status(500)
           .setHeader("Content-Type", "application/json")
           .send({ message: "Elasticsearch is down :D" });
     });
@@ -45,7 +45,7 @@ router.get("/mongoterm/:term", (req, res) => {
   //getDefinition(req.body.params)
 });
 
-// Read by ID
+// Read by ID (TODO)
 // Query MongoDB for req.params.id, return array of matching objects
 router.get("/id/:id", (req, res) => {
   const definition = [
@@ -67,13 +67,13 @@ router.get("/id/:id", (req, res) => {
   res.status(200).send(definition);
 });
 
-// Update by ID
+// Update by ID (TODO)
 // Update record in MongoDB for req.params.id
 router.put("/id/:id", (req, res) => {
   res.status(200).send(`Updated definition: ${req.params.id}`);
 });
 
-// Delete by ID
+// Delete by ID (TODO)
 // Validate user input and delete record in MongoDB for req.params.id
 router.delete("/id/:id", (req, res) => {
   res.status(200).send(`Deleted definition: ${req.params.id}`);

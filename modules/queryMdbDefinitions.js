@@ -13,6 +13,7 @@ const definitionSchema = new mongoose.Schema({
   thumbsDown: { type: Number, default: 0 },
   audioUrl: String,
   tags: [String],
+  notes: String,
   date: { type: Date, default: Date.now }
 });
 const esIP = process.env.ELASTICSEARCH_IP;
