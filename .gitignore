@@ -7,6 +7,8 @@ lib-cov
 *.pid
 *.gz
 *.mp3
+*.env
+.env
 mp3
 pids
 logs
@@ -15,5 +17,4 @@ build
 keys
 keys.js
 internal
-.env
 node_modules
