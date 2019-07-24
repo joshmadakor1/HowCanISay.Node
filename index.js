@@ -7,8 +7,7 @@ const definitions = require("./routes/definitions");
 const requests = require("./routes/requests");
 const profile = require("./routes/profile");
 const upload = require("./routes/upload");
-const https = require("https");
-const fs = require("fs");
+
 const result = require("dotenv").config();
 if (result.error) console.log(result.error);
 else console.log(result.parsed);
@@ -33,21 +32,4 @@ app.use("/api/upload", upload);
 
 const port = process.env.PORT || 8080;
 
-app.listen(port, () => {
-  //console.log(`Now listening on port ${port}`);
-  //console.log(process.env);
-});
-
-/*
-https
-  .createServer(
-    {
-      key: fs.readFileSync("server.key"),
-      cert: fs.readFileSync("server.cert")
-    },
-    app
-  )
-  .listen(port, () => {
-    console.log(`Listening on port ${port}.`);
-  });
-*/
+app.listen(port, () => {});

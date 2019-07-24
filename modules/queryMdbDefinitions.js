@@ -24,10 +24,10 @@ const requestSchema = new mongoose.Schema({
   notes: String,
   date: { type: Date, default: Date.now }
 });
-const esIP = process.env.ELASTICSEARCH_IP;
-const esPort = process.env.ELASTICSEARCH_PORT;
-const mongoIP = process.env.MONGO_IP;
-const mongoPort = process.env.MONGO_PORT;
+const esIP = process.env.ELASTICSEARCH_IP || "192.168.1.20";
+const esPort = process.env.ELASTICSEARCH_PORT || "9200";
+const mongoIP = process.env.MONGO_IP || "192.168.1.21";
+const mongoPort = process.env.MONGO_PORT || "27017";
 
 definitionSchema.plugin(mongoosastic, {
   host: esIP,
@@ -36,7 +36,9 @@ definitionSchema.plugin(mongoosastic, {
 
 const Definition = mongoose.model("Definition", definitionSchema);
 const Requests = mongoose.model("Request", requestSchema);
-
+const MONGO_CONNECTION_STRING =
+  process.env.MONGO_FULL_CONNECTION_STRING ||
+  `mongodb://${mongoIP}/Definitions`;
 Definition.createMapping((err, mapping) => {
   if (err) console.log("Error: Create mapping failed...", err);
   else console.log("Success: Definition Mapping created");
@@ -50,7 +52,7 @@ Requests.createMapping((err, mapping) => {
 */
 
 mongoose
-  .connect(`mongodb://${mongoIP}/Definitions`)
+  .connect(MONGO_CONNECTION_STRING)
   .then(() => console.log("Success: Connected to MongoDB"))
   .catch(err => console.error("Error: Could not connect to MongoDB...", err));
 
@@ -108,7 +110,7 @@ async function postRequest(definitionRequest) {
       console.log("Request Successfully Logged");
     })
     .catch(error => {
-      console.log("There was a fu ckin error");
+      console.log("There was a fuckin error");
     });
   return { result };
 }

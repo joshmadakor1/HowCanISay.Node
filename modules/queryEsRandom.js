@@ -1,7 +1,7 @@
 require("dotenv").config();
 const request = require("request");
-const esIP = process.env.ELASTICSEARCH_IP;
-const esPort = process.env.ELASTICSEARCH_PORT;
+const esIP = process.env.ELASTICSEARCH_IP || "192.168.1.20";
+const esPort = process.env.ELASTICSEARCH_PORT || "9200";
 
 async function queryEsRandom(callback) {
   await request(
