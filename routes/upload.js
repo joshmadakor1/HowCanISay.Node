@@ -3,7 +3,6 @@ const router = express.Router();
 const aws = require("aws-sdk");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
-const KEYS = require("../Internal/keys");
 const fs = require("fs");
 const AUDIO_LOCATION = __dirname + "/public/";
 router.use(express.static("public"));
@@ -11,11 +10,11 @@ let upload = multer({ dest: AUDIO_LOCATION });
 let type = upload.single("upl");
 
 // Set S3 endpoint to DigitalOcean Spaces
-const spacesEndpoint = new aws.Endpoint(KEYS.DO_ENDPOINT);
+const spacesEndpoint = new aws.Endpoint(process.env.DO_ENDPOINT);
 const s3 = new aws.S3({
   endpoint: spacesEndpoint,
-  accessKeyId: KEYS.DO_ACCESS_KEY_ID,
-  secretAccessKey: KEYS.DO_SECRET_ACCESS_KEY
+  accessKeyId: process.env.DO_ACCESS_KEY_ID,
+  secretAccessKey: process.env.DO_SECRET_ACCESS_KEY
 });
 
 router.get("/", (req, res) => {
