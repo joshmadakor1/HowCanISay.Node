@@ -10,7 +10,6 @@ const upload = require("./routes/upload");
 
 const result = require("dotenv").config();
 if (result.error) console.log(result.error);
-else console.log(result.parsed);
 
 //app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
