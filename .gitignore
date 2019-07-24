@@ -15,5 +15,5 @@ build
 keys
 keys.js
 internal
-
+.env
 node_modules
