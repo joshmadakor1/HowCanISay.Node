@@ -8,9 +8,8 @@ const profile = require("./routes/profile");
 const upload = require("./routes/upload");
 
 const result = require("dotenv").config();
-if (result.error) console.log(result.error);
 
-console.log(process.env);
+//console.log(process.env);
 //app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

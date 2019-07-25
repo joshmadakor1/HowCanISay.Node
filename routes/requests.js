@@ -1,23 +1,31 @@
 const express = require("express");
 const router = express.Router();
-const interractWithMongoDb = require("../modules/queryMdbDefinitions");
+const queryEs = require("../modules/queryEs");
 
-router.post("/mongorequest", (req, res) => {
-  interractWithMongoDb
-    .postRequest(req.body)
-    .then(() => {
-      res.status(200).send({ message: "success" });
-    })
-    .catch(err => {
-      res.status(500).send({ message: "error", error: err });
-    });
-
-  /*
-  console.log(req.body);
-  res.status(200).send({ message: "Welcome to Request" });
-  */
+router.post("/create", (req, res) => {
+  const request = req.body;
+  queryEs.createRequest(request, results => {
+    const result = JSON.parse(results).result;
+    if (result === "created") res.status(200).send({ message: "success" });
+    else res.status(500).send(results);
+  });
 });
 
+router.get("/search", (req, res) => {
+  const MAX_HITS = 100;
+  queryEs.searchRequest(MAX_HITS, results => {
+    if (results) res.status(200).send(results.hits);
+    else if (res)
+      res
+        .status(500)
+        .setHeader("Content-Type", "application/json")
+        .send({ message: "error" });
+    else {
+    }
+  });
+});
+
+//*************old:*********** */
 router.get("/mongorequest", (req, res) => {
   const maxNumberOfRecordsToReturn = 100;
   interractWithMongoDb
@@ -45,15 +53,11 @@ router.delete("/removemongorequest", (req, res) => {
   interractWithMongoDb
     .deleteSingleRequest(req.body)
     .then(data => {
-      console.log(data);
       res.status(200).send({ message: "success" });
     })
     .catch(error => {
-      console.log(error.message);
       res.status(500).send({ message: error.message });
     });
-
-  console.log(req.body);
 });
 
 module.exports = router;

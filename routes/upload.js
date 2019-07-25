@@ -22,17 +22,13 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", type, (req, res) => {
-  //console.log(req.body);
-  //console.log(req.file);
   fs.rename(
     `${AUDIO_LOCATION}/${req.file.filename}`,
     `${AUDIO_LOCATION}/${req.file.originalname}`,
     error => {
       if (error) {
-        console.log(error.message);
         res.status(500).send({ message: `${error.message}` });
       } else {
-        console.log(`${AUDIO_LOCATION}${req.file.originalname}`);
         //upload file to DigitalOcean Space
         //if Successfull, delete local file and return 200
         //if fail, delete local file and return 500

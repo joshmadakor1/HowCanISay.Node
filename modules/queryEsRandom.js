@@ -2,11 +2,15 @@ require("dotenv").config();
 const request = require("request");
 const esIP = process.env.ELASTICSEARCH_IP || "192.168.1.20";
 const esPort = process.env.ELASTICSEARCH_PORT || "9200";
+const esUser = process.env.ELASTICSEARCH_USER || "";
+const esPass = process.env.ELASTICSEARCH_PASSWORD || "";
+const definitions = process.env.ELASTICSEARCH_DEFINITIONS || "definitions_dev";
+const requests = process.env.ELASTICSEARCH_REQUESTS || "requests_dev";
 
 async function queryEsRandom(callback) {
   await request(
     {
-      url: `http://${esIP}:${esPort}/definitions/_search`,
+      url: `https://${esUser}:${esPass}@${esIP}:${esPort}/${definitions}/_search`,
       method: "GET",
       json: {
         size: 1,
