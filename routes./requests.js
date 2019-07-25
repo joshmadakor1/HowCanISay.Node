@@ -11,6 +11,16 @@ router.post("/create", (req, res) => {
   });
 });
 
+router.delete("/delete", (req, res) => {
+  const definitionId = req.body._id;
+  queryEs.deleteRequest(definitionId, result => {
+    //Todo: Handle other scenarios?
+    if (result.result === "not_found" || "deleted")
+      res.status(200).send({ message: "success" });
+    else res.status(200).send({ message: "success" });
+  });
+});
+
 router.get("/search", (req, res) => {
   const MAX_HITS = 100;
   queryEs.searchRequest(MAX_HITS, results => {

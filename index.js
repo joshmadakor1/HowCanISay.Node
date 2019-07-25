@@ -23,11 +23,13 @@ app.use(function(req, res, next) {
   next();
 });
 app.use("/", home);
-app.use("/api/definitions", definitions);
-app.use("/api/requests", requests);
-app.use("/api/profile", profile);
-app.use("/api/upload", upload);
+app.use("/definitions", definitions);
+app.use("/requests", requests);
+app.use("/profile", profile);
+app.use("/upload", upload);
 
 const port = process.env.PORT || 8080;
 
-app.listen(port, () => {});
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});

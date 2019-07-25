@@ -76,6 +76,7 @@ async function searchRequest(maxHits, callback) {
     }
   );
 }
+
 async function createRequest(req, callback) {
   await request(
     {
@@ -90,9 +91,25 @@ async function createRequest(req, callback) {
     }
   );
 }
+
+async function deleteRequest(requestId, callback) {
+  await request(
+    {
+      url: `https://${esUser}:${esPass}@${esIP}:${esPort}/${requests}/_doc/${requestId}`,
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" }
+    },
+    (req, res) => {
+      if (res) callback(res.body);
+      else callback(null);
+    }
+  );
+}
+
 module.exports = {
   searchDefinition,
   createDefinition,
   searchRequest,
-  createRequest
+  createRequest,
+  deleteRequest
 };
