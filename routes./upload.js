@@ -49,7 +49,11 @@ router.post("/", type, (req, res) => {
                 throw s3Err;
               }
               console.log(`File uploaded successfully at ${data.Location}`);
-
+              fs.unlink(`${AUDIO_LOCATION}/${req.file.originalname}`, err => {
+                if (err) console.log(err);
+                //log and handle
+                else console.log("successfully deleted"); //log
+              });
               res.status(200).send({ message: "success" });
             });
           }
