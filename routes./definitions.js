@@ -22,13 +22,6 @@ router.post("/create", (req, res) => {
   const definition = req.body;
   queryEs.createDefinition(definition, results => {
     const result = JSON.parse(results).result;
-    console.log(
-      "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-    );
-    console.log(JSON.parse(results));
-    console.log(
-      "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-    );
     if (result === "created") res.status(200).send({ message: "success" });
     else res.status(500).send(results);
   });

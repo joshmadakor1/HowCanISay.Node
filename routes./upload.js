@@ -34,12 +34,12 @@ router.post("/", type, (req, res) => {
         //if fail, delete local file and return 500
 
         fs.readFile(
-          __dirname + `\\public\\${req.file.originalname}`,
+          __dirname + `/public/${req.file.originalname}`,
           (err, data) => {
             if (err) throw err;
             const params = {
-              Bucket: "howcanisay", // pass your bucket name
-              Key: `${req.file.originalname}`, // file will be saved as testBucket/contacts.csv
+              Bucket: "howcanisay",
+              Key: `${req.file.originalname}`,
               Body: data,
               ACL: "public-read"
             };
