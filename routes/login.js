@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const errorHandlingMiddleware = require("../Middleware/errorHandlingMiddleware");
-// Create Profile
+
+// login
 router.post(
   "/",
   errorHandlingMiddleware(async (req, res) => {

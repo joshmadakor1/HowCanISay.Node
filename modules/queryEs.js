@@ -1,6 +1,6 @@
 require("dotenv").config();
 const request = require("request");
-const esIP = process.env.ELASTICSEARCH_IP || "167.99.172.34";
+const esIP = process.env.ELASTICSEARCH_IP || "192.168.1.20";
 const esPort = process.env.ELASTICSEARCH_PORT || "9200";
 const esUser = process.env.ELASTICSEARCH_USER || "";
 const esPass = process.env.ELASTICSEARCH_PASSWORD || "";
