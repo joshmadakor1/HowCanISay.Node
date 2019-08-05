@@ -11,21 +11,24 @@ const userSchema = new Schema({
   },
   local: {
     email: { type: String, lowercase: true },
-    password: { type: String }
+    password: { type: String },
+    displayName: { type: String }
   },
   google: {
     id: { type: String },
     email: {
       type: String,
       lowercase: true
-    }
+    },
+    displayName: { type: String }
   },
   facebook: {
     id: { type: String },
     email: {
       type: String,
       lowercase: true
-    }
+    },
+    displayName: { type: String }
   }
 });
 

@@ -13,7 +13,6 @@ router
 
 router.route("/oauth/google").post(
   (req, res, next) => {
-    console.log(req.body);
     next();
   },
   passport.authenticate("googleToken", { session: false }),

@@ -28,11 +28,14 @@ passport.use(
         if (user) return done(null, user);
 
         // If user doesn't exist
+        const temporaryDisplayName =
+          "user" + Math.floor(Math.random() * Math.floor(10000000000000000));
         const newUser = new User({
           method: "google",
           google: {
             id: profile.id,
-            email: profile.emails[0].value
+            email: profile.emails[0].value,
+            displayName: temporaryDisplayName
           }
         });
 
@@ -84,11 +87,14 @@ passport.use(
         if (user) return done(null, user);
 
         // If user doesn't exist
+        const temporaryDisplayName =
+          "user" + Math.floor(Math.random() * Math.floor(10000000000000000));
         const newUser = new User({
           method: "facebook",
           facebook: {
             id: profile.id,
-            email: profile.emails[0].value
+            email: profile.emails[0].value,
+            displayName: temporaryDisplayName
           }
         });
 
