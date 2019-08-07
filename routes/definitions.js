@@ -4,6 +4,10 @@ const router = express.Router();
 const queryEs = require("../modules/queryEs");
 const errorHandlingMiddleware = require("../Middleware/errorHandlingMiddleware");
 router.use(express.json());
+const { validateVote, schemas } = require("../Helpers/routeHelpers");
+const Controller_Definitions = require("../Controllers/definitions");
+const passport = require("passport");
+require("../passport");
 
 router.get(
   "/search/:searchTerm",
@@ -38,5 +42,19 @@ router.post(
     });
   })
 );
+
+router
+  .route("/submitvote")
+  .post(
+    passport.authenticate("jwt", { session: false }),
+    validateVote(schemas.voteSchema),
+    Controller_Definitions.submitVote
+  );
+
+router.route("/countVotes").post(Controller_Definitions.countVotes);
+
+router
+  .route("/getvotestatusforuser")
+  .post(Controller_Definitions.getvotestatusforuser);
 
 module.exports = router;

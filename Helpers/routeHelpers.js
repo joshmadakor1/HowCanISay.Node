@@ -19,6 +19,19 @@ module.exports = {
       next();
     };
   },
+  validateVote: schema => {
+    return (req, res, next) => {
+      // Create new user
+      let vote = req.body;
+
+      // Validate user properties
+      const result = Joi.validate(vote, schema);
+      if (result.error) return res.status(203).json(result.error);
+      if (!req.value) req.value = {};
+      req.value["body"] = result.value;
+      next();
+    };
+  },
   schemas: {
     authSchema: Joi.object().keys({
       email: Joi.string()
@@ -32,6 +45,14 @@ module.exports = {
         .required()
         .min(8)
         .max(32)
+    }),
+    voteSchema: Joi.object().keys({
+      userID: Joi.string().required(),
+      definitionID: Joi.string().required(),
+      direction: Joi.number()
+        .required()
+        .min(-1)
+        .max(1)
     })
   }
 };

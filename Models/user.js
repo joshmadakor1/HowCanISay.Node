@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 
 // Create schema
 const userSchema = new Schema({
+  displayName: { type: String },
   method: {
     type: String,
     enum: ["local", "google", "facebook"],
@@ -11,29 +12,45 @@ const userSchema = new Schema({
   },
   local: {
     email: { type: String, lowercase: true },
-    password: { type: String },
-    displayName: { type: String }
+    password: { type: String }
   },
   google: {
     id: { type: String },
     email: {
       type: String,
       lowercase: true
-    },
-    displayName: { type: String }
+    }
   },
   facebook: {
     id: { type: String },
     email: {
       type: String,
       lowercase: true
-    },
-    displayName: { type: String }
+    }
   }
 });
 
 userSchema.pre("save", async function(next) {
   try {
+    // If the account is fb/google, don't execute this
+    if (this.local.password === undefined) {
+      console.log(
+        "************Password already hashed, skipping hash function"
+      );
+      next();
+    }
+
+    // If the password is already hashed, don't execute this
+    if (
+      this.local.password.substring(0, 1) === "$" &&
+      this.local.password.length === 60
+    ) {
+      console.log(
+        "************Password already hashed, skipping hash function"
+      );
+      next();
+    }
+
     if (this.method !== "local") next();
     // Generate salt
     const salt = await bcrypt.genSalt(10);

@@ -31,11 +31,11 @@ passport.use(
         const temporaryDisplayName =
           "user" + Math.floor(Math.random() * Math.floor(10000000000000000));
         const newUser = new User({
+          displayName: temporaryDisplayName,
           method: "google",
           google: {
             id: profile.id,
-            email: profile.emails[0].value,
-            displayName: temporaryDisplayName
+            email: profile.emails[0].value
           }
         });
 
@@ -59,7 +59,6 @@ passport.use(
       try {
         // Find the user specified in token
         const user = await User.findOne({ _id: payload.sub });
-
         // If user doesn't exist, handle
         if (!user) done(null, false);
 
@@ -90,11 +89,11 @@ passport.use(
         const temporaryDisplayName =
           "user" + Math.floor(Math.random() * Math.floor(10000000000000000));
         const newUser = new User({
+          displayName: temporaryDisplayName,
           method: "facebook",
           facebook: {
             id: profile.id,
-            email: profile.emails[0].value,
-            displayName: temporaryDisplayName
+            email: profile.emails[0].value
           }
         });
 
