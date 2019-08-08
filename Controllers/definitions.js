@@ -62,8 +62,6 @@ module.exports = {
       const userVotes = await Vote.find({
         definitionID: req.body.definitionID
       });
-      console.log(`******************this many votes:`);
-      console.log(userVotes.length);
 
       // Calculate score
       let score = 0;

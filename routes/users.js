@@ -1,6 +1,10 @@
 const router = require("express-promise-router")();
 const Controller_Users = require("../Controllers/users");
-const { validateBody, schemas } = require("../Helpers/routeHelpers");
+const {
+  validateBody,
+  validateDisplayName,
+  schemas
+} = require("../Helpers/routeHelpers");
 const passport = require("passport");
 
 require("../passport");
@@ -43,6 +47,7 @@ router
   .route("/updatedisplayname")
   .post(
     passport.authenticate("jwt", { session: false }),
+    validateDisplayName(schemas.displayNameSchema),
     Controller_Users.updatedisplayname
   );
 

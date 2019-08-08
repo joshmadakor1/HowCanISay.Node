@@ -21,7 +21,7 @@ module.exports = {
   },
   validateVote: schema => {
     return (req, res, next) => {
-      // Create new user
+      // Get vote
       let vote = req.body;
 
       // Validate user properties
@@ -32,6 +32,17 @@ module.exports = {
       next();
     };
   },
+  validateDisplayName: schema => {
+    return (req, res, next) => {
+      const displayName = req.body;
+      const result = Joi.validate(displayName, schema);
+      console.log(result);
+      if (result.error) return res.status(203).json(result.error);
+      //if (!req.value) req.value = {};
+      //req.value["body"] = result.value;
+      next();
+    };
+  },
   schemas: {
     authSchema: Joi.object().keys({
       email: Joi.string()
@@ -39,11 +50,11 @@ module.exports = {
         .required(),
       password: Joi.string()
         .required()
-        .min(8)
+        .min(1)
         .max(128),
       displayName: Joi.string()
         .required()
-        .min(8)
+        .min(1)
         .max(32)
     }),
     voteSchema: Joi.object().keys({
@@ -53,6 +64,13 @@ module.exports = {
         .required()
         .min(-1)
         .max(1)
+    }),
+    displayNameSchema: Joi.object().keys({
+      displayName: Joi.string()
+        .required()
+        .min(1)
+        .max(20)
+        .regex(/(^[\w\d-]{1,32}$)/)
     })
   }
 };

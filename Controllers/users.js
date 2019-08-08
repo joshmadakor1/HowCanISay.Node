@@ -63,7 +63,6 @@ module.exports = {
 
   secret: async (req, res, next) => {
     console.log("I got here!");
-    console.log(req.user);
 
     res.status(200).json({ secret: "SecretMessage" });
   },
@@ -71,13 +70,11 @@ module.exports = {
   updatedisplayname: async (req, res, next) => {
     try {
       const newDisplayName = req.body.displayName;
-      console.log(newDisplayName);
 
       // Search if a user already exists with the desired displayName
       const displayNameExists = await User.findOne({
         displayName: newDisplayName
       });
-      console.log("EXISTS?????????????", displayNameExists);
 
       // If user already exists with the desired displayname, return 201 and notify client
       if (displayNameExists)
@@ -89,9 +86,7 @@ module.exports = {
       let user = await User.findOne({ _id: req.user._id });
 
       user.displayName = newDisplayName;
-      console.log("ATTEMPTING TO SAVE!!!!", user);
       await user.save();
-      console.log(user);
       return res.status(200).json({ message: "good work men" });
 
       //return res.status(200).json({ message: "Display name updated successfully" });
