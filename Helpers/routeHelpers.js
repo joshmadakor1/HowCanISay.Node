@@ -43,6 +43,23 @@ module.exports = {
       next();
     };
   },
+  validateDefinition: schema => {
+    return (req, res, next) => {
+      const definition = req.body;
+      const result = Joi.validate(definition, schema);
+      if (result.error) return res.status(203).json(result.error);
+      next();
+    };
+  },
+  validateRequest: schema => {
+    return (req, res, next) => {
+      const definition = req.body;
+      console.log(definition);
+      const result = Joi.validate(definition, schema);
+      if (result.error) return res.status(203).json(result.error);
+      next();
+    };
+  },
   schemas: {
     authSchema: Joi.object().keys({
       email: Joi.string()
@@ -71,6 +88,46 @@ module.exports = {
         .min(1)
         .max(20)
         .regex(/(^[\w\d-]{1,32}$)/)
+    }),
+    requestSchema: Joi.object().keys({
+      sourceLanguage: Joi.string()
+        .required()
+        .min(1)
+        .max(30),
+      destinationLanguage: Joi.string()
+        .required()
+        .min(1)
+        .max(30),
+      sourceTerm: Joi.string()
+        .required()
+        .min(1)
+        .max(255),
+      notes: Joi.string(),
+      author: Joi.string().required()
+    }),
+    definitionSchema: Joi.object().keys({
+      sourceLanguage: Joi.string()
+        .required()
+        .min(1)
+        .max(30),
+      destinationLanguage: Joi.string()
+        .required()
+        .min(1)
+        .max(30),
+      destinationTermRoman: Joi.string(),
+      notes: Joi.string(),
+      tags: Joi.string(),
+      author: Joi.string().required(),
+      audioUrl: Joi.string().required(),
+      sourceTerm: Joi.string()
+        .required()
+        .min(1)
+        .max(255),
+      destinationTermNative: Joi.string()
+        .required()
+        .min(1)
+        .max(255),
+      date: Joi.date().required()
     })
   }
 };

@@ -2,6 +2,7 @@ const JWT = require("jsonwebtoken");
 const User = require("../Models/user");
 const Vote = require("../Models/vote");
 const { JWT_SECRET } = require("../Keys/keys");
+const queryEs = require("../modules/queryEs");
 
 signToken = user => {
   const displayName = user.displayName;
@@ -57,6 +58,46 @@ module.exports = {
       return res.status(500).json({ error });
     }
   },
+  createDefinition: async (req, res) => {
+    const definition = req.body;
+    await queryEs.createDefinition(definition, results => {
+      const result = JSON.parse(results).result;
+      if (result === "created") res.status(200).send({ message: "success" });
+      else {
+        winston.error("Unable to reach search engine.");
+        console.log({ message: "Unable to create definition." });
+        res.status(501).send({ message: "Unable to create definition." });
+      }
+    });
+  },
+  createRequest: async (req, res) => {
+    const request = req.body;
+    console.log(request);
+    await queryEs.createRequest(request, results => {
+      const result = JSON.parse(results).result;
+      if (result === "created") res.status(200).send({ message: "success" });
+      else res.status(500).send({ message: "Unable to reach search engine." });
+    });
+  },
+  getRequests: async (req, res) => {
+    const MAX_HITS = 100;
+    await queryEs.searchRequest(MAX_HITS, results => {
+      if (results) res.status(200).send(results.hits);
+      else if (res)
+        res.status(500).send({ message: "Unable to reach search engine." });
+      else {
+      }
+    });
+  },
+  deleteRequest: async (req, res) => {
+    const definitionId = req.body._id;
+    await queryEs.deleteRequest(definitionId, result => {
+      //Todo: Handle other scenarios?
+      if (result.result === "not_found" || "deleted")
+        res.status(200).send({ message: "success" });
+      else res.status(500).send({ message: "Unable to reach search engine." });
+    });
+  },
   countVotes: async (req, res) => {
     try {
       const userVotes = await Vote.find({
@@ -83,7 +124,6 @@ module.exports = {
   },
   getvotestatusforuser: async (req, res) => {
     try {
-      console.log(req.body);
       // Check if there are any votes this particular user has subbmited for the given definition
       const userVote = await Vote.findOne({
         userID: req.body.userID,
