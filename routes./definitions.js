@@ -32,6 +32,27 @@ router.get(
   })
 );
 
+router.post(
+  "/search/:searchTerm",
+  errorHandlingMiddleware(async (req, res) => {
+    const languages = req.body;
+    if (req.params) {
+      await queryEs.searchDefinitionPost(
+        req.params.searchTerm.toLowerCase(),
+        languages,
+        results => {
+          if (results) res.status(200).send(results.hits);
+          else {
+            winston.error("Unable to reach search engine.");
+            console.log({ message: "Unable to reach search engine." });
+            res.status(501).send({ message: "Unable to reach search engine." });
+          }
+        }
+      );
+    }
+  })
+);
+
 // Create by Term
 // Post validate user input and post new definition to elasticsearch
 router

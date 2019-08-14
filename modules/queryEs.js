@@ -47,6 +47,70 @@ async function searchDefinition(searchTerm, callback) {
   }
 }
 
+async function searchDefinitionPost(searchTerm, languages, callback) {
+  console.log(languages);
+  const non_English_Regex = /([^\x00 -\x7F]+)/g;
+  const searchTermContainsSpaces =
+    searchTerm.includes(" ") || searchTerm.includes("　");
+
+  //This is to determine if it is a non-ascii character (japanese, for example)
+  //If the search term has hiragana, need to do a match search, not fuzzy
+
+  //If the search term contains spaces, do a fuzzy/match query
+  if (
+    searchTermContainsSpaces ||
+    searchTerm.match(non_English_Regex) !== null
+  ) {
+    await request(
+      {
+        url: `https://${esUser}:${esPass}@${esIP}:${esPort}/${definitions}/_search`,
+        method: "GET",
+        json: {
+          query: {
+            bool: {
+              must: [
+                { match: { sourceTerm: searchTerm } },
+                { match: { sourceLanguage: languages.sourceLanguage } },
+                {
+                  match: { destinationLanguage: languages.destinationLanguage }
+                }
+              ]
+            }
+          }
+        }
+      },
+      (req, res) => {
+        if (res) callback(res.body.hits);
+        else callback(null); // If Elasticsearch is down or there is some other problem
+      }
+    );
+  } //If the search term does not contain spaces, do a wildcard search
+  else {
+    await request(
+      {
+        url: `https://${esUser}:${esPass}@${esIP}:${esPort}/${definitions}/_search`,
+        method: "GET",
+        json: {
+          query: {
+            bool: {
+              must: [
+                { wildcard: { sourceTerm: `*${searchTerm}*` } },
+                { match: { sourceLanguage: languages.sourceLanguage } },
+                {
+                  match: { destinationLanguage: languages.destinationLanguage }
+                }
+              ]
+            }
+          }
+        }
+      },
+      (req, res) => {
+        if (res) callback(res.body.hits);
+        else callback(null); // If Elasticsearch is down or there is some other problem
+      }
+    );
+  }
+}
 async function createDefinition(definition, callback) {
   await request(
     {
@@ -108,6 +172,7 @@ async function deleteRequest(requestId, callback) {
 
 module.exports = {
   searchDefinition,
+  searchDefinitionPost,
   createDefinition,
   searchRequest,
   createRequest,

@@ -47,6 +47,7 @@ module.exports = {
     return (req, res, next) => {
       const definition = req.body;
       const result = Joi.validate(definition, schema);
+      console.log(result.error);
       if (result.error) return res.status(203).json(result.error);
       next();
     };
@@ -123,8 +124,16 @@ module.exports = {
         .required()
         .min(1)
         .max(255),
-      destinationTermNative: Joi.string()
-        .required()
+      destinationWord: Joi.string()
+        .min(1)
+        .max(255),
+      destinationKanji: Joi.string()
+        .min(1)
+        .max(255),
+      destinationKana: Joi.string()
+        .min(1)
+        .max(255),
+      destinationRomaji: Joi.string()
         .min(1)
         .max(255),
       date: Joi.date().required()

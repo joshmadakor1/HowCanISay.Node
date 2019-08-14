@@ -26,12 +26,18 @@ router.post(
   "/",
   type,
   errorHandlingMiddleware(async (req, res) => {
+    if (req.file === undefined) {
+      console.log("nope.");
+      return res
+        .status(500)
+        .send({ message: `You must upload audio with your translation.` });
+    }
     await fs.rename(
       `${AUDIO_LOCATION}/${req.file.filename}`,
       `${AUDIO_LOCATION}/${req.file.originalname}`,
       error => {
         if (error) {
-          res.status(500).send({ message: `${error.message}` });
+          return res.status(500).send({ message: `${error.message}` });
         } else {
           //upload file to DigitalOcean Space
           //if Successfull, delete local file and return 200
