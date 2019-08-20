@@ -170,11 +170,29 @@ async function deleteRequest(requestId, callback) {
   );
 }
 
+async function getAllDefinitions(callback) {
+  await request(
+    {
+      url: `https://${esUser}:${esPass}@${esIP}:${esPort}/${definitions}/_search?size=10000`,
+      method: "GET",
+      json: {
+        query: { match_all: {} }
+      }
+    },
+    (req, res) => {
+      console.log(res.body.hits);
+      if (res) return callback(res.body.hits);
+      else return callback(null); // If Elasticsearch is down or there is some other problem
+    }
+  );
+}
+
 module.exports = {
   searchDefinition,
   searchDefinitionPost,
   createDefinition,
   searchRequest,
   createRequest,
-  deleteRequest
+  deleteRequest,
+  getAllDefinitions
 };

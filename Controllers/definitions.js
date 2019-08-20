@@ -58,6 +58,16 @@ module.exports = {
       return res.status(500).json({ error });
     }
   },
+
+  getAllDefinitions: async (req, res, next) => {
+    await queryEs.getAllDefinitions(results => {
+      if (results) return res.status(200).json(results);
+      return res
+        .status(500)
+        .json({ message: "No results return, check connection" });
+    });
+  },
+
   createDefinition: async (req, res) => {
     const definition = req.body;
     await queryEs.createDefinition(definition, results => {

@@ -27,12 +27,13 @@ module.exports = {
       if (req.body.userID === undefined)
         return res.status(404).json({ message: "Must provide userID" });
       const user = await User.findOne({ _id: req.body.userID });
-
+      console.log(user.displayName);
       return res.status(200).json({ displayName: user.displayName });
     } catch (error) {
       return res.status(404).json({ displayName: error });
     }
   },
+
   signUp: async (req, res, next) => {
     const { email, password, displayName } = req.value.body;
     console.log(req.value.body);

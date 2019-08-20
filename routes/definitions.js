@@ -78,4 +78,8 @@ router
   .route("/getvotestatusforuser")
   .post(errorHandlingMiddleware(Controller_Definitions.getvotestatusforuser));
 
+router
+  .route("/getall")
+  .get(errorHandlingMiddleware(Controller_Definitions.getAllDefinitions));
+
 module.exports = router;
