@@ -7,7 +7,7 @@ router.get(
   "/",
   errorHandlingMiddleware(async (req, res) => {
     await queryEsRandom(results => {
-      if (results) res.status(200).send({ message: results.hits[0]._source });
+      if (results) res.status(200).send({ message: results.hits[0] });
       else {
         res.status(500).send({ message: "Unable to reach search engine." });
       }
